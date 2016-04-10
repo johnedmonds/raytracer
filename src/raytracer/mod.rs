@@ -37,8 +37,6 @@ struct IntersectingEntity<'a, T: 'a + HasColor + Intersectable> {
 
 fn find_closest_intersecting_entity<T: HasColor + Intersectable>(
     ray: Ray,
-    canvas_x: i32,
-    canvas_y: i32,
     entities: &Vec<T>) -> Option<IntersectingEntity<T>> {
     let mut closest_intersecting_entity: Option<IntersectingEntity<T>> = None;
     
@@ -95,11 +93,11 @@ pub fn trace<T:HasColor + Intersectable>(
     if entities.is_empty() {
         Rgba([0, 0, 0, 0])
     } else {
-        let camera_ray = Ray{origin: camera.position, direction: camera.direction};
+        let camera_ray = Ray{
+            origin: camera.from_image_coords(canvas_x, canvas_y),
+            direction: camera.direction};
         let intersecting_entity = find_closest_intersecting_entity(
             camera_ray,
-            canvas_x,
-            canvas_y,
             entities);
         match intersecting_entity {
             None => Rgba([0, 0, 0, 0]),
@@ -108,7 +106,7 @@ pub fn trace<T:HasColor + Intersectable>(
                 let intersection_point = intersecting_entity.intersection.intersection_point();
                 let direction_to_light = (light.position - intersection_point).normalized();
                 let ray_to_light = Ray{origin: intersection_point, direction: direction_to_light};
-                match find_closest_intersecting_entity(ray_to_light, canvas_x, canvas_y, entities) {
+                match find_closest_intersecting_entity(ray_to_light, entities) {
                     None => apply_brightness_to_color(intersecting_entity.entity.get_color(), light.brightness),
                     Some(_) => Rgba{data: [0, 0, 0, 0]}
                 }
