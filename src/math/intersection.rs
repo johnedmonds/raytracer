@@ -11,8 +11,7 @@ pub struct Intersection {
 }
 
 impl Intersection {
-    fn intersection_point(&self) -> Vec3 {
-        let x = self.ray.origin + self.ray.direction;
+    pub fn intersection_point(&self) -> Vec3 {
         self.ray.origin + self.ray.direction * self.t
     }
 }
