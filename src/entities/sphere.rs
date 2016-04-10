@@ -4,10 +4,10 @@ use math::intersection::{Intersection, Intersectable};
 use image::Rgba;
 use entities::HasColor;
 
-struct Sphere {
-    center: Vec3,
-    radius: f32,
-    color: Rgba<u8>,
+pub struct Sphere {
+    pub center: Vec3,
+    pub radius: f32,
+    pub color: Rgba<u8>,
 }
 
 impl Intersectable for Sphere {
