@@ -1,4 +1,5 @@
 pub mod math;
+pub mod entities;
 
 #[cfg(test)]
 mod test {
