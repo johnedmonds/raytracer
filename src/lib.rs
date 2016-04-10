@@ -1,3 +1,5 @@
+extern crate image;
+
 pub mod math;
 pub mod entities;
 

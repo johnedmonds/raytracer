@@ -1,10 +1,13 @@
 use math::vec::Vec3;
 use math::ray::Ray;
 use math::intersection::{Intersection, Intersectable};
+use image::Rgba;
+use entities::HasColor;
 
 struct Sphere {
     center: Vec3,
     radius: f32,
+    color: Rgba<u8>,
 }
 
 impl Intersectable for Sphere {
@@ -25,5 +28,11 @@ impl Intersectable for Sphere {
         let distance_to_nearest_intersection = tca + thc;
         
         Intersection{ray: ray.clone(), t: distance_to_nearest_intersection}
+    }
+}
+
+impl HasColor for Sphere {
+    fn get_color(&self) -> Rgba<u8> {
+        self.color
     }
 }
