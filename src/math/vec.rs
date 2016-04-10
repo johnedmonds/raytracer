@@ -1,6 +1,9 @@
 use std::ops::Add;
 use std::ops::Sub;
+use std::ops::Mul;
+use std::ops::Div;
 
+#[derive(Clone)]
 pub struct Vec3 {
     pub x: f32,
     pub y: f32,
@@ -39,5 +42,19 @@ impl Sub for Vec3 {
 
     fn sub(self, other: Vec3) -> Vec3 {
         Vec3{x: self.x - other.x, y: self.y - other.y, z: self.z - other.z}
+    }
+}
+
+impl Mul<f32> for Vec3 {
+    type Output = Vec3;
+    fn mul(self, rhs: f32) -> Vec3 {
+        Vec3{x: self.x * rhs, y: self.y * rhs, z: self.z * rhs}
+    }
+}
+
+impl Div<f32> for Vec3 {
+    type Output = Vec3;
+    fn div(self, rhs: f32) -> Vec3 {
+        Vec3{x: self.x / rhs, y: self.y / rhs, z: self.z / rhs}
     }
 }
