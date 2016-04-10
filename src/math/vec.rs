@@ -21,7 +21,10 @@ impl Vec3 {
             z: self.x * other.y - self.y * other.x}
     }
     pub fn len(&self) -> f32 {
-        (self.x * self.x + self.y * self.y + self.z * self.z).sqrt()
+        self.len_squared().sqrt()
+    }
+    pub fn len_squared(&self) -> f32 {
+        self.x * self.x + self.y * self.y + self.z * self.z
     }
     pub fn normalized(&self) -> Vec3 {
         let len: f32 = self.len();
