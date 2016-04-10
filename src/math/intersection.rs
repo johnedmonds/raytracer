@@ -3,7 +3,7 @@ use math::vec::Vec3;
 
 /// An intersection between a Ray and an intersectable object.
 pub struct Intersection {
-    ray: Ray,
+    pub ray: Ray,
     
     /// Intersection point on the line.
     /// Specifically this is the t in the equation intersection_point = ray.direction * t + ray.origin
