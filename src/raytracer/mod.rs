@@ -8,7 +8,6 @@ use math::vec::Vec3;
 use math::ray::Ray;
 
 /// A camera which looks at the scene.
-/// Cameras have a 2x2 square "canvas" looking  
 pub struct Camera {
     pub position: Vec3,
     pub direction: Vec3,
