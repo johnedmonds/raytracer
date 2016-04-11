@@ -25,7 +25,7 @@ impl Intersectable for Sphere {
             None
         } else {
             // d is the distance from tca (or at least the point at distance tca from the origin along ray) to the sphere center.
-            let d_squared = center_to_origin.len() - tca * tca;
+            let d_squared = center_to_origin.len_squared() - tca * tca;
             
             // Check if the "intersection" happens outside the sphere.
             if d_squared > self.radius * self.radius {
