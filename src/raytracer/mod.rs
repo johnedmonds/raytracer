@@ -77,7 +77,7 @@ fn apply_brightness_to_color(color: Rgba<u8>, brightness: f32) -> Rgba<u8> {
             (color.data[0] as f32 * brightness) as u8,
             (color.data[1] as f32 * brightness) as u8,
             (color.data[2] as f32 * brightness) as u8,
-            (color.data[3] as f32 * brightness) as u8,            
+            color.data[3],
         ]
     }
 }
