@@ -83,12 +83,12 @@ fn apply_brightness_to_color(color: Rgba<u8>, brightness: f32) -> Rgba<u8> {
 }
 
 pub fn trace<T:HasColor + Intersectable>(
-    camera: Camera,
+    camera: &Camera,
     canvas_x: i32,
     canvas_y: i32,
     entities: &Vec<T>,
     // TODO: Only one light for now. Hopefully more later.
-    light: Light) -> Rgba<u8> {
+    light: &Light) -> Rgba<u8> {
     if entities.is_empty() {
         Rgba([0, 0, 0, 0])
     } else {
