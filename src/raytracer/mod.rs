@@ -107,7 +107,7 @@ pub fn trace<T:HasColor + Intersectable>(
                 let ray_to_light = Ray{origin: intersection_point, direction: direction_to_light};
                 match find_closest_intersecting_entity(ray_to_light, entities) {
                     None => apply_brightness_to_color(intersecting_entity.entity.get_color(), light.brightness),
-                    Some(_) => Rgba{data: [0, 0, 0, 0]}
+                    Some(_) => Rgba{data: [0, 0, 0, 255]}
                 }
             }
                 
