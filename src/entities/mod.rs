@@ -15,31 +15,49 @@ pub struct Sphere {
 
 impl Intersectable for Sphere {
     fn intersection(&self, ray: Ray) -> Option<Intersection> {
-        let center_to_origin = self.center - ray.origin;
-        // tca is the distance along ray where we intersect with a perpendictular
-        // line going through the sphere center.
-        let tca = center_to_origin.dot(ray.direction);
+        // So we want to find the intersection between ray and self (a sphere).
+        // We know that the equation for a sphere is x^2 + y^2 + z^2 = r^2
+        // where x, y, and z are the coordinates of each point on the sphere
+        // and r is the radius of the sphere.
+        //
+        // We can actually simplify this and say P^2 = r^2 where P is a vector [x, y, z]
+        // and represents all points P on the sphere.
+        //
+        // Now that's the equation for a sphere centered at the origin. We want a
+        // sphere centered anywhere (for example at the point C). But to make everything
+        // work, we just move this sphere back to the origin by subtracting C from
+        // all points P
+        //
+        // The new equation becomes (P - C)^2 = r^2.
+        //
+        // Now we want to intersect the given ray with the sphere. The equation for
+        // a ray is O + tD where O is the ray's origin, D is the ray's direction,
+        // and t is the distance along the ray from O in the direction D.
+        // We want to find t for which the ray intersects the circle (or find that
+        // no such intersection exists). We can just set P = ray = O + tD.
+        // This plugs right back into the original equation which becomes
+        // (O + tD - C)^2 - r^2 = 0
+        // We can rewrite this as (tD + (O - C))^2 - r^2 = 0
+        // After a bunch of multiplying, we end up with
+        // t^2D^2 + 2tD(O - C) + (O - C)^2 - r^2 = 0.
+        //
+        // Now if you squint, this looks a bit like a quadratic equation involving t.
+        // That's good for us since solving for t otherwise is pretty hard.
+        // Recall the a, b, and c of quadratic equation fame. In this context they
+        // become a = 1, b = 2D(O - C), and c = (O - C)^2 - r^2
+        // Plugging it into the quadratic equation gives us our solutions (or
+        // tells us no solutions exist).
         
-        // Check if the intersection is behind the camera.
-        if tca < 0.0 {
+        let a: f32 = 1.0;
+        let b: f32 = 2.0 * ray.direction.dot(ray.origin - self.center);
+        let c: f32 = (ray.origin - self.center).dot(ray.origin - self.center) - self.radius * self.radius;
+        
+        // TODO: this api is broken, we should return both intersections.
+        let discriminate = b * b - 4.0 * a * c;
+        if discriminate < 0.0 {
             None
         } else {
-            // d is the distance from tca (or at least the point at distance tca from the origin along ray) to the sphere center.
-            let d_squared = center_to_origin.len_squared() - tca * tca;
-            
-            // Check if the "intersection" happens outside the sphere.
-            if d_squared > self.radius * self.radius {
-                None
-            } else {
-                // This gives us the distance from tca to the intersection points (yes points, plural).
-                // However, we always take the negative one since that's the one closest to the camera.
-                let thc = -(self.radius * self.radius - d_squared).sqrt();
-
-                // Remember that thc is guaranteed to be negative here so this is really more like tca - thc.
-                let distance_to_nearest_intersection = tca + thc;
-                
-                Some(Intersection{ray: ray.clone(), t: distance_to_nearest_intersection})
-            }
+            Some(Intersection{ray: ray, t: (- b - discriminate.sqrt()) / 2.0})
         }
     }
 }
