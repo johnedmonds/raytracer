@@ -34,6 +34,27 @@ struct IntersectingEntity<'a, T: 'a + HasColor + Intersectable> {
     distance_squared: f32,
 }
 
+fn get_closest_visible_intersection(intersections: Vec<Intersection>) -> Option<Intersection> {
+    let mut closest_visible_intersection:Option<Intersection> = None;
+    for intersection in intersections {
+        if intersection.t >= 0.0 {
+            closest_visible_intersection = match closest_visible_intersection {
+                None => {
+                    Some(intersection)
+                },
+                Some(closest_visible_intersection) => {
+                    if intersection.t < closest_visible_intersection.t {
+                        Some(intersection)
+                    } else {
+                        Some(closest_visible_intersection)
+                    }
+                }
+            }
+        }
+    }
+    closest_visible_intersection
+}
+
 fn find_closest_intersecting_entity<T: HasColor + Intersectable>(
     ray: Ray,
     entities: &Vec<T>) -> Option<IntersectingEntity<T>> {
@@ -43,8 +64,9 @@ fn find_closest_intersecting_entity<T: HasColor + Intersectable>(
     // the squared distance. Computing sqrt() is computationally intensive
     // so let's avoid it if possible.
     for entity in entities {
-        let intersection = entity.intersection(ray);
-        match intersection {
+        let intersections: Vec<Intersection> = entity.intersection(ray);
+        let closest_visible_intersection = get_closest_visible_intersection(intersections);
+        match closest_visible_intersection {
             None => {},
             Some(intersection) => {
                 let distance_squared = (intersection.intersection_point() - ray.origin).len_squared();

@@ -14,7 +14,7 @@ pub struct Sphere {
 }
 
 impl Intersectable for Sphere {
-    fn intersection(&self, ray: Ray) -> Option<Intersection> {
+    fn intersection(&self, ray: Ray) -> Vec<Intersection> {
         // So we want to find the intersection between ray and self (a sphere).
         // We know that the equation for a sphere is x^2 + y^2 + z^2 = r^2
         // where x, y, and z are the coordinates of each point on the sphere
@@ -51,13 +51,19 @@ impl Intersectable for Sphere {
         let a: f32 = 1.0;
         let b: f32 = 2.0 * ray.direction.dot(ray.origin - self.center);
         let c: f32 = (ray.origin - self.center).dot(ray.origin - self.center) - self.radius * self.radius;
-        
-        // TODO: this api is broken, we should return both intersections.
-        let discriminate = b * b - 4.0 * a * c;
+
+        let discriminate: f32 = b * b - 4.0 * a * c;
         if discriminate < 0.0 {
-            None
+            vec!()
         } else {
-            Some(Intersection{ray: ray, t: (- b - discriminate.sqrt()) / 2.0})
+            let discriminate_sqrt = discriminate.sqrt();
+            let negative_intersection = Intersection{ray: ray, t: (- b - discriminate_sqrt) / 2.0};
+            if discriminate == 0.0 {
+                vec!(negative_intersection)
+            } else {
+                let positive_intersection = Intersection{ray: ray, t: (-b + discriminate_sqrt) / 2.0};
+                vec!(negative_intersection, positive_intersection)
+            }
         }
     }
 }

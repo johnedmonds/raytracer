@@ -18,5 +18,5 @@ impl Intersection {
 
 /// An object that can be intersected by a ray.
 pub trait Intersectable {
-    fn intersection(&self, ray: Ray) -> Option<Intersection>;
+    fn intersection(&self, ray: Ray) -> Vec<Intersection>;
 }
