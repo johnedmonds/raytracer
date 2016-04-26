@@ -22,7 +22,9 @@ impl Camera {
     fn from_image_coords(&self, x: i32, y: i32) -> Vec3 {
         Vec3 {
             x: x as f32 / self.image_width as f32 * 2.0 - 1.0,
-            y: y as f32 / self.image_height as f32 * 2.0 - 1.0,
+            // Image coords are up-side down from camera coords (the upper-left-hand corder for images is (0, 0) but for cameras is (-1, 1)).
+            // So let's just negate the y coordinate to get everything right-side up.
+            y: -(y as f32 / self.image_height as f32 * 2.0 - 1.0),
             z: 0.0}
             + self.position
     }
