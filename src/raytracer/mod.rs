@@ -38,14 +38,13 @@ fn get_closest_visible_intersection(intersections: Vec<Intersection>) -> Option<
     intersections
         .into_iter()
         .filter(|intersection| intersection.t >= 0.0)
-        .map(|intersection| Some(intersection))
         .fold(None, |current_max, intersection| match current_max {
             None => {
-                intersection
+                Some(intersection)
             },
             Some(current_max) => {
-                if intersection.as_ref().unwrap().t < current_max.t {
-                    intersection
+                if intersection.t < current_max.t {
+                    Some(intersection)
                 } else {
                     Some(current_max)
                 }
