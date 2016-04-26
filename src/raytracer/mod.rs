@@ -35,24 +35,22 @@ struct IntersectingEntity<'a, T: 'a + HasColor + Intersectable> {
 }
 
 fn get_closest_visible_intersection(intersections: Vec<Intersection>) -> Option<Intersection> {
-    let mut closest_visible_intersection:Option<Intersection> = None;
-    for intersection in intersections {
-        if intersection.t >= 0.0 {
-            closest_visible_intersection = match closest_visible_intersection {
-                None => {
-                    Some(intersection)
-                },
-                Some(closest_visible_intersection) => {
-                    if intersection.t < closest_visible_intersection.t {
-                        Some(intersection)
-                    } else {
-                        Some(closest_visible_intersection)
-                    }
+    intersections
+        .into_iter()
+        .filter(|intersection| intersection.t >= 0.0)
+        .map(|intersection| Some(intersection))
+        .fold(None, |current_max, intersection| match current_max {
+            None => {
+                intersection
+            },
+            Some(current_max) => {
+                if intersection.as_ref().unwrap().t < current_max.t {
+                    intersection
+                } else {
+                    Some(current_max)
                 }
             }
-        }
-    }
-    closest_visible_intersection
+        })
 }
 
 fn find_closest_intersecting_entity<T: HasColor + Intersectable>(
