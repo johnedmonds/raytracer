@@ -11,18 +11,14 @@ use nalgebra::{Vector3, Point3};
 fn main() {
     let entities = vec![
         Sphere{
-            center: Point3::new(
-                0.0,
-                0.0,
-                10.0,
-            ),
-            radius: 0.5,
-            color: Rgba([0, 255, 0, 255]),
-        },
-        Sphere{
-            center: Point3::new(0.1, 1.0, 8.0),
+            center: Point3::new(0.0, 0.0, 3.0),
             radius: 0.5,
             color: Rgba([0, 0, 255, 255]),
+        },
+        Sphere{
+            center: Point3::new(0.5, 1.0, 2.5),
+            radius: 0.5,
+            color: Rgba([0, 255, 0, 255]),
         }
     ];
     
