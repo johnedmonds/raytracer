@@ -5,8 +5,7 @@ use entities::Light;
 use math::intersection::Intersectable;
 use math::intersection::Intersection;
 use math::ray::Ray;
-use nalgebra::Vector3;
-use nalgebra::Point3;
+use nalgebra::{Vector3, Point3, distance_squared, Norm};
 
 /// A camera which looks at the scene.
 pub struct Camera {
@@ -27,7 +26,7 @@ impl Camera {
             // So let's just negate the y coordinate to get everything right-side up.
             -(y as f32 / self.image_height as f32 * 2.0 - 1.0),
             0.0);
-        self.position + camera_space_point;
+        (self.position + camera_space_point).to_vector()
     }
 }
 
@@ -69,7 +68,7 @@ fn find_closest_intersecting_entity<T: HasColor + Intersectable>(
         match closest_visible_intersection {
             None => {},
             Some(intersection) => {
-                let distance_squared = (intersection.intersection_point() - ray.origin).len_squared();
+                let distance_squared = distance_squared(&intersection.intersection_point(), &ray.origin);
                 closest_intersecting_entity = match closest_intersecting_entity {
                     None => Some(IntersectingEntity{
                         entity: entity,
@@ -115,7 +114,7 @@ pub fn trace<T:HasColor + Intersectable>(
         Rgba([0, 0, 0, 0])
     } else {
         let camera_ray = Ray{
-            origin: camera.from_image_coords(canvas_x, canvas_y),
+            origin: camera.from_image_coords(canvas_x, canvas_y).to_point(),
             direction: camera.direction};
         let intersecting_entity = find_closest_intersecting_entity(
             camera_ray,
@@ -125,7 +124,7 @@ pub fn trace<T:HasColor + Intersectable>(
             Some(intersecting_entity) => {
                 // Check for a shadow.
                 let intersection_point = intersecting_entity.intersection.intersection_point();
-                let direction_to_light = (light.position - intersection_point).normalized();
+                let direction_to_light = (light.position - intersection_point).normalize();
                 let ray_to_light = Ray{origin: intersection_point, direction: direction_to_light};
                 match find_closest_intersecting_entity(ray_to_light, entities) {
                     None => apply_brightness_to_color(intersecting_entity.entity.get_color(), light.brightness),

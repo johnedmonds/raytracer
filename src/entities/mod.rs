@@ -1,9 +1,8 @@
 use image::Rgba;
 use math::ray::Ray;
 use math::intersection::{Intersection, Intersectable};
-use nalgebra::Vector3;
-use nalgebra::Point3;
-use nalgebra::traits::geometry::Dot;
+use nalgebra::{Vector3, Point3, Dot};
+
 pub trait HasColor {
     fn get_color(&self) -> Rgba<u8>;
 }

@@ -1,33 +1,34 @@
 extern crate raytracer;
 extern crate image;
+extern crate nalgebra;
 
 use raytracer::entities::Sphere;
-use raytracer::math::vec::Vec3;
 use image::Rgba;
 use std::fs::File;
 use std::path::Path;
+use nalgebra::{Vector3, Point3};
 
 fn main() {
     let entities = vec![
         Sphere{
-            center: Vec3{
-                x: 0.0,
-                y: 0.0,
-                z: 4.0,
-            },
+            center: Point3::new(
+                0.0,
+                0.0,
+                4.0,
+            ),
             radius: 1.0,
             color: Rgba([0, 255, 0, 255]),
         }
     ];
     
     let camera = raytracer::raytracer::Camera{
-        position: Vec3 {x: 0.0, y: 0.0, z: 0.0},
-        direction: Vec3 {x: 0.0, y: 0.0, z: 1.0},
+        position: Point3::new(0.0, 0.0, 0.0),
+        direction: Vector3::new(0.0, 0.0, 1.0),
         image_width: 512,
         image_height: 512,
     };
     let light = raytracer::entities::Light {
-        position: Vec3 {x: 0.0, y: 10.0, z: 0.0},
+        position: Point3::new(0.0, 10.0, 0.0),
         brightness: 1.0,
     };
     let mut image_buffer = image::ImageBuffer::new(camera.image_width as u32, camera.image_height as u32);
