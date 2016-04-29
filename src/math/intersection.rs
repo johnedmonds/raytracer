@@ -12,7 +12,7 @@ pub struct Intersection {
 
 impl Intersection {
     pub fn intersection_point(&self) -> Point3<f32> {
-        (self.ray.origin.to_vector() + (self.ray.direction * self.t)).to_point()
+        self.ray.origin + self.ray.direction * self.t
     }
 }
 
