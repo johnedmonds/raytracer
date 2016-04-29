@@ -1,14 +1,15 @@
 use image::Rgba;
-use math::vec::Vec3;
 use math::ray::Ray;
 use math::intersection::{Intersection, Intersectable};
-
+use nalgebra::Vector3;
+use nalgebra::Point3;
+use nalgebra::traits::geometry::Dot;
 pub trait HasColor {
     fn get_color(&self) -> Rgba<u8>;
 }
 
 pub struct Sphere {
-    pub center: Vec3,
+    pub center: Point3<f32>,
     pub radius: f32,
     pub color: Rgba<u8>,
 }
@@ -49,8 +50,9 @@ impl Intersectable for Sphere {
         // tells us no solutions exist).
         
         let a: f32 = 1.0;
-        let b: f32 = 2.0 * ray.direction.dot(ray.origin - self.center);
-        let c: f32 = (ray.origin - self.center).dot(ray.origin - self.center) - self.radius * self.radius;
+        let center_to_ray: Vector3<f32> = ray.origin - self.center;
+        let b: f32 = 2.0 * ray.direction.dot(&center_to_ray);
+        let c: f32 = center_to_ray.dot(&center_to_ray) - self.radius * self.radius;
 
         let discriminate: f32 = b * b - 4.0 * a * c;
         if discriminate < 0.0 {
@@ -75,7 +77,7 @@ impl HasColor for Sphere {
 }
 
 pub struct Light {
-    pub position: Vec3,
+    pub position: Point3<f32>,
     // TODO: Should be color but let's just use brighness for now.
     pub brightness: f32,
 }

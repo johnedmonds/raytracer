@@ -1,5 +1,5 @@
 use math::ray::Ray;
-use math::vec::Vec3;
+use nalgebra::*;
 
 /// An intersection between a Ray and an intersectable object.
 pub struct Intersection {
@@ -11,8 +11,8 @@ pub struct Intersection {
 }
 
 impl Intersection {
-    pub fn intersection_point(&self) -> Vec3 {
-        self.ray.origin + self.ray.direction * self.t
+    pub fn intersection_point(&self) -> Point3<f32> {
+        (self.ray.origin.to_vector() + (self.ray.direction * self.t)).to_point()
     }
 }
 

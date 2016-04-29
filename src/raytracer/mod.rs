@@ -4,13 +4,14 @@ use entities::HasColor;
 use entities::Light;
 use math::intersection::Intersectable;
 use math::intersection::Intersection;
-use math::vec::Vec3;
 use math::ray::Ray;
+use nalgebra::Vector3;
+use nalgebra::Point3;
 
 /// A camera which looks at the scene.
 pub struct Camera {
-    pub position: Vec3,
-    pub direction: Vec3,
+    pub position: Point3<f32>,
+    pub direction: Vector3<f32>,
     pub image_width: i32,
     pub image_height: i32,
 }
@@ -19,14 +20,14 @@ impl Camera {
     /// Move a point from image space into camera space.
     /// Camera space tries to maintain a 2x2 size (-1 to 1 for width and height)
     /// but for images that aren't square, we stretch it a little bit.
-    fn from_image_coords(&self, x: i32, y: i32) -> Vec3 {
-        Vec3 {
-            x: x as f32 / self.image_width as f32 * 2.0 - 1.0,
+    fn from_image_coords(&self, x: i32, y: i32) -> Vector3<f32> {
+        let camera_space_point: Vector3<f32> = Vector3::new(
+            (x as f32) / self.image_width as f32 * 2.0 - 1.0,
             // Image coords are up-side down from camera coords (the upper-left-hand corder for images is (0, 0) but for cameras is (-1, 1)).
             // So let's just negate the y coordinate to get everything right-side up.
-            y: -(y as f32 / self.image_height as f32 * 2.0 - 1.0),
-            z: 0.0}
-            + self.position
+            -(y as f32 / self.image_height as f32 * 2.0 - 1.0),
+            0.0);
+        self.position + camera_space_point;
     }
 }
 

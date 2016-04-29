@@ -5,3 +5,4 @@ authors = ["John Edmonds <john.a.edmonds@gmail.com>"]
 
 [dependencies]
 image = "*"
+nalgebra = "*"
