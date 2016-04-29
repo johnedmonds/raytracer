@@ -14,10 +14,15 @@ fn main() {
             center: Point3::new(
                 0.0,
                 0.0,
-                4.0,
+                10.0,
             ),
-            radius: 1.0,
+            radius: 0.5,
             color: Rgba([0, 255, 0, 255]),
+        },
+        Sphere{
+            center: Point3::new(0.1, 1.0, 8.0),
+            radius: 0.5,
+            color: Rgba([0, 0, 255, 255]),
         }
     ];
     
