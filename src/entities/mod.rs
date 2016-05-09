@@ -67,6 +67,10 @@ impl Entity for Sphere {
             }
         }
     }
+    
+    fn normal_at_point(&self, point: &Point3<f32>) -> Vector3<f32> {
+        *point - self.center
+    }
 }
 
 impl HasColor for Sphere {
@@ -85,4 +89,10 @@ pub struct Light {
 pub trait Entity: HasColor {
     /// Returns the point at which an intersection occurs on this object.
     fn intersection(&self, ray: Ray) -> Vec<Intersection>;
+
+    /// Returns the normal at the given point on this object.
+    ///
+    /// Every surface will have two normals. This function will return the one that faces outward.
+    /// If the normal faces inward, the lighting will be calculated incorrectly.
+    fn normal_at_point(&self, point: &Point3<f32>) -> Vector3<f32>;
 }
