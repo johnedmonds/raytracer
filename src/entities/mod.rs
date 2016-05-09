@@ -83,5 +83,6 @@ pub struct Light {
 
 /// A physical entity in the scene (e.g. a ball or train, etc. but not a light or camera).
 pub trait Entity: HasColor {
+    /// Returns the point at which an intersection occurs on this object.
     fn intersection(&self, ray: Ray) -> Vec<Intersection>;
 }
