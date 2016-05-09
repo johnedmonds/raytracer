@@ -6,7 +6,7 @@ use raytracer::entities::Sphere;
 use image::Rgba;
 use std::fs::File;
 use std::path::Path;
-use nalgebra::{Vector3, Point3};
+use nalgebra::{Vector3, Point3, Rotation3};
 use raytracer::raytracer::scene::Scene;
 
 fn main() {
@@ -23,12 +23,13 @@ fn main() {
         }
     ];
     
-    let camera = raytracer::raytracer::camera::Camera::new(
-        Point3::new(0.0, 0.0, 0.0),
-        Vector3::new(0.0, 0.0, 1.0),
-        512,
-        512,
-    );
+    let camera = raytracer::raytracer::camera::Camera{
+        position: Point3::new(0.0, 0.0, 0.0),
+        // No rotation
+        rotation: Rotation3::new(Vector3::new(0.0, 0.0, 0.0)),
+        image_width: 512,
+        image_height: 512,
+    };
     let light = raytracer::entities::Light {
         position: Point3::new(0.0, 10.0, 0.0),
         brightness: 1.0,
