@@ -22,7 +22,7 @@ fn main() {
         }
     ];
     
-    let camera = raytracer::raytracer::Camera{
+    let camera = raytracer::raytracer::camera::Camera{
         position: Point3::new(0.0, 0.0, 0.0),
         direction: Vector3::new(0.0, 0.0, 1.0),
         image_width: 512,
