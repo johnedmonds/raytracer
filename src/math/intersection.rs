@@ -15,8 +15,3 @@ impl Intersection {
         self.ray.origin + self.ray.direction * self.t
     }
 }
-
-/// An object that can be intersected by a ray.
-pub trait Intersectable {
-    fn intersection(&self, ray: Ray) -> Vec<Intersection>;
-}

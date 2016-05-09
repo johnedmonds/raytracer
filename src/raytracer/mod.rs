@@ -4,13 +4,13 @@ pub mod scene;
 use std::vec::Vec;
 use image::Rgba;
 use entities::HasColor;
-use math::intersection::Intersectable;
+use entities::Entity;
 use math::intersection::Intersection;
 use math::ray::Ray;
 use nalgebra::{distance_squared, Norm};
 use raytracer::scene::Scene;
 
-struct IntersectingEntity<'a, T: 'a + HasColor + Intersectable> {
+struct IntersectingEntity<'a, T: 'a + HasColor + Entity> {
     entity: &'a T,
     intersection: Intersection,
     distance_squared: f32,
@@ -34,7 +34,7 @@ fn get_closest_visible_intersection(intersections: Vec<Intersection>) -> Option<
         })
 }
 
-fn find_closest_intersecting_entity<T: HasColor + Intersectable>(
+fn find_closest_intersecting_entity<T: HasColor + Entity>(
     ray: Ray,
     entities: &Vec<T>) -> Option<IntersectingEntity<T>> {
     let mut closest_intersecting_entity: Option<IntersectingEntity<T>> = None;
@@ -83,7 +83,7 @@ fn apply_brightness_to_color(color: Rgba<u8>, brightness: f32) -> Rgba<u8> {
     }
 }
 
-pub fn trace<T:HasColor + Intersectable>(
+pub fn trace<T:HasColor + Entity>(
     scene: &Scene<T>,
     canvas_x: i32,
     canvas_y: i32) -> Rgba<u8> {

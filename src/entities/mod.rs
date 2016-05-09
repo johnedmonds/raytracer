@@ -1,6 +1,6 @@
 use image::Rgba;
 use math::ray::Ray;
-use math::intersection::{Intersection, Intersectable};
+use math::intersection::Intersection;
 use nalgebra::{Vector3, Point3, Dot};
 
 pub trait HasColor {
@@ -13,7 +13,7 @@ pub struct Sphere {
     pub color: Rgba<u8>,
 }
 
-impl Intersectable for Sphere {
+impl Entity for Sphere {
     fn intersection(&self, ray: Ray) -> Vec<Intersection> {
         // So we want to find the intersection between ray and self (a sphere).
         // We know that the equation for a sphere is x^2 + y^2 + z^2 = r^2
@@ -79,4 +79,9 @@ pub struct Light {
     pub position: Point3<f32>,
     // TODO: Should be color but let's just use brighness for now.
     pub brightness: f32,
+}
+
+/// A physical entity in the scene (e.g. a ball or train, etc. but not a light or camera).
+pub trait Entity {
+    fn intersection(&self, ray: Ray) -> Vec<Intersection>;
 }
