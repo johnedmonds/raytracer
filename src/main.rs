@@ -23,12 +23,12 @@ fn main() {
         }
     ];
     
-    let camera = raytracer::raytracer::camera::Camera{
-        position: Point3::new(0.0, 0.0, 0.0),
-        direction: Vector3::new(0.0, 0.0, 1.0),
-        image_width: 512,
-        image_height: 512,
-    };
+    let camera = raytracer::raytracer::camera::Camera::new(
+        Point3::new(0.0, 0.0, 0.0),
+        Vector3::new(0.0, 0.0, 1.0),
+        512,
+        512,
+    );
     let light = raytracer::entities::Light {
         position: Point3::new(0.0, 10.0, 0.0),
         brightness: 1.0,
