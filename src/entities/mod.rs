@@ -82,6 +82,6 @@ pub struct Light {
 }
 
 /// A physical entity in the scene (e.g. a ball or train, etc. but not a light or camera).
-pub trait Entity {
+pub trait Entity: HasColor {
     fn intersection(&self, ray: Ray) -> Vec<Intersection>;
 }
