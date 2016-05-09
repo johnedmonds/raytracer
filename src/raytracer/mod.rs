@@ -1,14 +1,14 @@
 pub mod camera;
+pub mod scene;
 
 use std::vec::Vec;
 use image::Rgba;
 use entities::HasColor;
-use entities::Light;
 use math::intersection::Intersectable;
 use math::intersection::Intersection;
 use math::ray::Ray;
 use nalgebra::{distance_squared, Norm};
-use raytracer::camera::Camera;
+use raytracer::scene::Scene;
 
 struct IntersectingEntity<'a, T: 'a + HasColor + Intersectable> {
     entity: &'a T,
@@ -84,31 +84,28 @@ fn apply_brightness_to_color(color: Rgba<u8>, brightness: f32) -> Rgba<u8> {
 }
 
 pub fn trace<T:HasColor + Intersectable>(
-    camera: &Camera,
+    scene: &Scene<T>,
     canvas_x: i32,
-    canvas_y: i32,
-    entities: &Vec<T>,
-    // TODO: Only one light for now. Hopefully more later.
-    light: &Light) -> Rgba<u8> {
-    if entities.is_empty() {
+    canvas_y: i32) -> Rgba<u8> {
+    if scene.entities.is_empty() {
         Rgba([0, 0, 0, 0])
     } else {
         let camera_ray = Ray{
-            origin: camera.position,
-            direction: camera.from_image_coords(canvas_x, canvas_y),
+            origin: scene.camera.position,
+            direction: scene.camera.from_image_coords(canvas_x, canvas_y),
         };
         let intersecting_entity = find_closest_intersecting_entity(
             camera_ray,
-            entities);
+            scene.entities);
         match intersecting_entity {
             None => Rgba([0, 0, 0, 0]),
             Some(intersecting_entity) => {
                 // Check for a shadow.
                 let intersection_point = intersecting_entity.intersection.intersection_point();
-                let direction_to_light = (light.position - intersection_point).normalize();
+                let direction_to_light = (scene.light.position - intersection_point).normalize();
                 let ray_to_light = Ray{origin: intersection_point, direction: direction_to_light};
-                match find_closest_intersecting_entity(ray_to_light, entities) {
-                    None => apply_brightness_to_color(intersecting_entity.entity.get_color(), light.brightness),
+                match find_closest_intersecting_entity(ray_to_light, scene.entities) {
+                    None => apply_brightness_to_color(intersecting_entity.entity.get_color(), scene.light.brightness),
                     Some(_) => Rgba{data: [0, 0, 0, 255]}
                 }
             }

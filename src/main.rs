@@ -7,6 +7,7 @@ use image::Rgba;
 use std::fs::File;
 use std::path::Path;
 use nalgebra::{Vector3, Point3};
+use raytracer::raytracer::scene::Scene;
 
 fn main() {
     let entities = vec![
@@ -34,7 +35,13 @@ fn main() {
     };
     let mut image_buffer = image::ImageBuffer::new(camera.image_width as u32, camera.image_height as u32);
     for (x, y, pixel) in image_buffer.enumerate_pixels_mut() {
-        *pixel = raytracer::raytracer::trace(&camera, x as i32, y as i32, &entities, &light);
+        *pixel = raytracer::raytracer::trace(
+            &Scene {
+                camera: &camera,
+                entities: &entities,
+                light: &light},
+            x as i32,
+            y as i32);
     }
     
     let ref mut fout = File::create(&Path::new("test.png")).unwrap();
